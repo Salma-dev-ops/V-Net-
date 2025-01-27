@@ -1,0 +1,113 @@
+ Most relevant DocuSign APIs in this project:
+
+1. eSignature REST API
+
+The eSignature REST API is used for sending and managing documents that require electronic signatures.
+
+Key Use Cases 
+
+1. Sending Consent Forms to Volunteers
+
+2. Tracking the Status of Documents
+
+3. Retrieving Completed Forms
+
+Implementation Steps:
+
+1. Authentication: Obtain an OAuth token to securely access the API.
+
+import requests
+
+# Get OAuth token
+def get_access_token():
+    url = "https://account-d.docusign.com/oauth/token"
+    payload = {
+        "grant_type": "password",
+        "client_id": "YOUR_CLIENT_ID",
+        "client_secret": "YOUR_CLIENT_SECRET",
+        "username": "YOUR_EMAIL",
+        "password": "YOUR_PASSWORD"
+    }
+    response = requests.post(url, data=payload)
+    return response.json()["access_token"]
+
+
+2. Sending Documents for Signature:
+
+import base64
+
+def send_envelope(access_token, account_id):
+    # Base64 encode your document (PDF)
+    with open("consent_form.pdf", "rb") as file:
+        encoded_document = base64.b64encode(file.read()).decode()
+
+    url = f"https://demo.docusign.net/restapi/v2.1/accounts/{account_id}/envelopes"
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "emailSubject": "Volunteer Consent Form",
+        "documents": [
+            {
+                "documentBase64": encoded_document,
+                "name": "Consent Form",
+                "fileExtension": "pdf",
+                "documentId": "1"
+            }
+        ],
+        "recipients": {
+            "signers": [
+                {
+                    "email": "volunteer@example.com",
+                    "name": "John Doe",
+                    "recipientId": "1",
+                    "routingOrder": "1"
+                }
+            ]
+        },
+        "status": "sent"
+    }
+    response = requests.post(url, json=payload, headers=headers)
+    return response.json()
+
+
+3. Check Document Status:
+
+def check_status(access_token, account_id, envelope_id):
+    url = f"https://demo.docusign.net/restapi/v2.1/accounts/{account_id}/envelopes/{envelope_id}"
+    headers = {
+        "Authorization": f"Bearer {access_token}"
+    }
+    response = requests.get(url, headers=headers)
+    return response.json()
+
+2. Embedded Signing with Focused View
+
+Embedded signing allows users to sign directly within your application without being redirected.
+
+Key Use Cases in the Project:
+
+Allow volunteers or donors to sign forms directly on your platform.
+
+
+Implementation Steps:
+
+1. Create an Envelope with a Recipient View: Add a recipient_view link when creating an envelope:
+
+def create_recipient_view(access_token, account_id, envelope_id):
+    url = f"https://demo.docusign.net/restapi/v2.1/accounts/{account_id}/envelopes/{envelope_id}/views/recipient"
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "returnUrl": "https://yourapplication.com/success",
+        "authenticationMethod": "none",
+        "email": "volunteer@example.com",
+        "userName": "John Doe",
+        "clientUserId": "123" # Must match the recipient in the envelope payload
+    }
+    response = requests.post(url, json=payload, headers=headers)
+    return response.json()["url"]
+
