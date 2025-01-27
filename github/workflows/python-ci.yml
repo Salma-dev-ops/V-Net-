@@ -1,0 +1,22 @@
+name: Deploy Docs
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Install MkDocs
+        run: pip install mkdocs
+
+      - name: Build and Deploy
+        run: |
+          mkdocs build
+          mkdocs gh-deploy --force
