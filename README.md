@@ -1,5 +1,5 @@
 # V-Net-
-Non-profits are often bogged down by administrative tasks like managing volunteer onboarding, donor agreements and compliance documents. These processes are typically time-consuming and disconnected, leaving organizations less time to focus on their mission. 
+Non-profits are often bogged down by administrative tasks like managing volunteer onboarding, donor agreements and compliance documents. These processes are typically time-consuming and disconnected, leaving organizations less time to focus on their mission.
 # V-Net: Empowering Non-Profits with Seamless Document Management 
 
 V-Net is an innovative platform designed to streamline workflows for non-profit organizations. By leveraging DocuSign's powerful APIs, V-Net provides a seamless end-to-end solution for managing documents such as volunteer onboarding forms, donor agreements and compliance records. Our mission is to help non-profits focus on what they do best—creating impact—while we handle the paperwork.
